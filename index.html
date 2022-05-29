@@ -12,13 +12,20 @@
 <body>
     <header class="bg-primary bg-gradient text-center">Weather Dashboard</header>
 
-    <div class="search col-3">
-        <h1 class="col-12">Search for a City:</h1>
-        <form id="city-form">
-            <input type= "text" class="col-12" id="city-input" autofocus="true"/>
-            <button type="submit" class="btn bg-primary col-12">Search</button>
-        </form>
+    <div class="row">
+        <!-- Search Bar column-->
+        <div class="search col-3 m-3">
+            <h1 class="col-12">Search for a City:</h1>
+            <form id="city-form">
+                <input type= "text" class="col-12" id="city-input" autofocus="true"/>
+                <button type="submit" class="btn bg-primary col-12">Search</button>
+            </form>
+        </div>
+
+        <!-- Results area-->
+        <div id="today-weather"></div>
     </div>
+
 
 
 <!--Javascript link-->
