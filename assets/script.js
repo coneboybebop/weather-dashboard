@@ -1,3 +1,4 @@
+var searches = [];
 
 var cityInputEl = document.querySelector("#city-input");
 var cityFormEl = document.querySelector("#city-form");
@@ -7,6 +8,9 @@ var searchSubmitHandler = function(event) {
 
     // prevent page from refreshing
     event.preventDefault();
+
+    // clear search box
+    cityInputEl.textContent= "";
 
     // get text from input
     var city = cityInputEl.value.trim();
@@ -20,11 +24,23 @@ var searchSubmitHandler = function(event) {
         alert("please type a city name");
     };
 
+    saveSearch(cityInputEl);
+
+    
+
+    
+    
+
 };
-// api url variable
+// variable for storing past searches
+var saveSearch = function() {
+    localStorage.setItem("searches",JSON.stringify(searches));
+
+};
+
 
 var getCoord = function(city) {
-var apiUrl = "https://api.openweathermap.org/data/3.0/weather?q=" + city + "&units=imperial&limit=1&appid=974d21a8200f2a8724bff9bbf087d1a6";
+var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&limit=1&appid=974d21a8200f2a8724bff9bbf087d1a6";
 fetch(apiUrl)
     .then(function(response) {
         // request was successful
@@ -32,9 +48,9 @@ fetch(apiUrl)
         
         response.json().then(function(data) {
             
-            console.log(data);
-            console.log(data.main.temp);
-            getWeather(data, city)
+            
+            getWeather(data, city);
+            getLatAndLon(data);
             
         });
         } else {
@@ -44,6 +60,21 @@ fetch(apiUrl)
     .catch(function(error) {
         alert("Unable to connect to server");
     });
+
+// get latitude and longitude variables for next api call
+var getLatAndLon = function(forecast) {
+    var apiUrlFore = "https://api.openweathermap.org/data/2.5/forecast?lat=" + forecast.coord.lat + "&lon=" + forecast.coord.lon + "&appid=974d21a8200f2a8724bff9bbf087d1a6";
+    fetch(apiUrlFore)
+        .then(function(response) {
+            response.json().then(function(data) {
+
+                getForecast(data);
+                console.log(data);
+            });
+        }
+        
+        )
+}
     
 
 };
@@ -54,6 +85,10 @@ var getWeather = function(weather, city) {
    var milliseconds = (weather.dt * 1000);
    var dateObject = new Date(milliseconds);
    var date = dateObject.toLocaleString();
+
+   // clear previous content
+   todayWeatherEl.innerHTML = ""
+  
 
     // create border for today's weather element
     todayWeatherEl.classList = "border border-dark border-3 col-8 m-1";
@@ -88,6 +123,17 @@ var getWeather = function(weather, city) {
     todayUvEl.innerHTML = "UV: Index" + UV
 
 };
+
+
+var getForecast = function(forecast) {
+
+    var forecastTitleEl = document.createElement("h3");
+    
+    forecastTitleEl.innerHTML = "Five Day Forecast";
+
+}
+
+
 
 
 
